@@ -1,7 +1,7 @@
 MIRROR_SCRIPTS="/root/scripts"
 MIRROR_LOG="/var/log/cron.log"
-#m h            command
-09 0-23/6 * * * "$MIRROR_SCRIPTS/ctan-mirror.bash" >>"$MIRROR_LOG"
-09 2-23/6 * * * "$MIRROR_SCRIPTS/termux-mirror.bash" >>"$MIRROR_LOG"
-41 4-23/6 * * * "$MIRROR_SCRIPTS/apt-mirror.bash" >>"$MIRROR_LOG"
-02 4-23/6 * * * "$MIRROR_SCRIPTS/dnf-reposync.bash" >>"$MIRROR_LOG"
+#m h            user command
+09 0-23/6 * * * root "$MIRROR_SCRIPTS/ctan-mirror.bash" >>"$MIRROR_LOG"
+09 2-23/6 * * * root "$MIRROR_SCRIPTS/termux-mirror.bash" >>"$MIRROR_LOG"
+41 4-23/6 * * * root "$MIRROR_SCRIPTS/apt-mirror.bash" >>"$MIRROR_LOG"
+02 4-23/6 * * * root "$MIRROR_SCRIPTS/dnf-reposync.bash" >>"$MIRROR_LOG"
