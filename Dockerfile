@@ -4,14 +4,23 @@ RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y \
     cron curl jq apt-mirror dnf dnf-plugins-core rsync
 
+# Dnf plugins-core-workaround (hopefully unnecessary in the future)
+RUN echo 'pluginpath=/usr/lib/python3/dist-packages/dnf-plugins' >> /etc/dnf/dnf.conf
+
 # Add script files
-ADD scripts/ /root/scripts/
+COPY scripts/ /root/scripts/
 
 # Add apt-mirror config
-ADD apt-mirror.conf /etc/apt/mirror.list
+COPY etc/apt/apt-mirror.list /etc/apt/mirror.list
+
+# Add dnf-reposync config
+COPY etc/yum.repos.d/ /etc/yum.repos.d/
 
 # Add crontab file in the cron directory and set execution rights
-ADD --chmod=0644 crontab /etc/cron.d/mirror-cron
+COPY --chmod=0644 crontab /etc/cron.d/mirror-cron
 
-# Create a log folder in /var/log
-RUN install -d -m 0755 -o root -g root /var/log/mirror
+# Create the log file to be able to run tail
+RUN touch /var/log/cron.log
+
+# Run the command on container startup
+CMD cron && tail -f /var/log/cron.log

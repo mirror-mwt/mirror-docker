@@ -5,10 +5,8 @@ set -e
 MIRROR_URL="mirror.mwt.me"
 
 SCRIPT_DIR="$(dirname "$0")"
-desination_path="/mnt/mirror/apt-mirror"
-mirror_path="/mnt/mirror/apt-mirror/mirror"
-
-. "${SCRIPT_DIR}/.secrets/cloudflare"
+desination_path="/mirror/apt-mirror"
+mirror_path="/mirror/apt-mirror/mirror"
 
 # Create a tempfile
 #
@@ -18,16 +16,13 @@ TMPFILE=$(mktemp /tmp/apt-mirror.XXXXXX)
 # Mirror
 ####################
 # clean before we mirror (clean deletes InRelease)
-"$desination_path/var/clean.sh"
+if [ -f "$desination_path/var/clean.sh" ]; then
+    "$desination_path/var/clean.sh"
+fi
 # mirror
 apt-mirror
 # download missing InRelease file
 wget -qNP "$mirror_path/zotero.retorque.re/file/apt-package-archive" "https://zotero.retorque.re/file/apt-package-archive/InRelease"
-
-####################
-# Deploy
-####################
-"$SCRIPT_DIR/tools/deploy.sh" "$desination_path"
 
 ####################
 # CDN Purge

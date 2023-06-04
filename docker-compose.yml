@@ -1,0 +1,13 @@
+version: "3.3"
+
+services:
+  mirrror-primary:
+    container_name: mirror-primary
+    build:
+      context: .
+      dockerfile: Dockerfile
+    env_file: env.conf
+    network_mode: host
+    volumes:
+      - /mnt/storage/mirror:/mirror
+    restart: "unless-stopped"
