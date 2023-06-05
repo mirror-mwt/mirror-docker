@@ -1,7 +1,7 @@
 version: "3.3"
 
 services:
-  mirrror-primary:
+  mirror-primary:
     container_name: mirror-primary
     build:
       context: .
