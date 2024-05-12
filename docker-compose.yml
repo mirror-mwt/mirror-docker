@@ -7,7 +7,6 @@ services:
       context: .
       dockerfile: Dockerfile
     env_file: env.conf
-    network_mode: host
     volumes:
       - /mnt/storage/mirror:/mirror
     restart: "unless-stopped"
