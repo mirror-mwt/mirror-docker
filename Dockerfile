@@ -3,7 +3,7 @@ FROM debian:bookworm-slim
 RUN apt-get update \
     && DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends \
     cron curl jq apt-mirror dnf dnf-plugins-core rsync \
-    bzip2
+    ca-certificates bzip2
 
 # Dnf plugins-core-workaround (hopefully unnecessary in the future)
 RUN echo 'pluginpath=/usr/lib/python3/dist-packages/dnf-plugins' >> /etc/dnf/dnf.conf
@@ -24,4 +24,4 @@ COPY --chmod=0644 crontab /etc/cron.d/mirror-cron
 RUN touch /var/log/cron.log
 
 # Run the command on container startup
-CMD cron && tail -f /var/log/cron.log
+CMD printenv | grep "CLOUDFLARE_TOKEN" >> /etc/environment && cron && tail -f /var/log/cron.log
