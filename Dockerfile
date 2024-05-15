@@ -24,4 +24,4 @@ COPY --chmod=0644 crontab /etc/cron.d/mirror-cron
 RUN touch /var/log/cron.log
 
 # Run the command on container startup
-CMD printenv | grep "CLOUDFLARE_TOKEN" >> /etc/environment && cron && tail -f /var/log/cron.log
+CMD printenv | grep ^MWT_ >> /etc/environment && cron && tail -f /var/log/cron.log

@@ -27,13 +27,13 @@ wget -qNP "$mirror_path/zotero.retorque.re/file/apt-package-archive" "https://zo
 ####################
 # CDN Purge
 ####################
-if [ -n "$CLOUDFLARE_TOKEN" ]; then
+if [ -n "$MWT_CLOUDFLARE_TOKEN" ]; then
     find "$mirror_path" -type f -regex '.*Release\|.*Packages\.?[^/]*' -mmin -360 -print | sed \
         -e "s|^${mirror_path}/apt.packages.shiftkey.dev/ubuntu|ghd/deb|" \
         -e "s|^${mirror_path}/zotero.retorque.re/file/apt-package-archive|zotero/deb|" |
         while mapfile -t -n 30 ary && ((${#ary[@]})); do
             printf '%s\n' "${ary[@]}" | jq -R . | jq -s "{ \"files\" : map(\"https://${MIRROR_URL}/\" + .) }" | tee "$TMPFILE"
-            curl -H "Content-Type:application/json" -H "Authorization: Bearer ${CLOUDFLARE_TOKEN}" -d "@$TMPFILE" "https://api.cloudflare.com/client/v4/zones/7344a2687b9c922e211744794188f6e7/purge_cache"
+            curl -H "Content-Type:application/json" -H "Authorization: Bearer ${MWT_CLOUDFLARE_TOKEN}" -d "@$TMPFILE" "https://api.cloudflare.com/client/v4/zones/7344a2687b9c922e211744794188f6e7/purge_cache"
             echo ""
         done
 fi

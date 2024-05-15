@@ -22,7 +22,7 @@ RSYNC_PASSWORD=termuxmirror rsync -ai --delete --exclude termux-main-21 --log-fi
 ####################
 
 # Purge the CDN using values from rsync log
-if [ -n "$CLOUDFLARE_TOKEN" ]; then
+if [ -n "$MWT_CLOUDFLARE_TOKEN" ]; then
     cat $TMPFILE1 | grep -E '\] (>f\.|cLc\.t)' | cut -d \  -f 5 |
         sed \
             -e "s|^termux-main|main|" \
@@ -30,7 +30,7 @@ if [ -n "$CLOUDFLARE_TOKEN" ]; then
             -e "s|^termux-x11|x11|" |
         while mapfile -t -n 30 ary && ((${#ary[@]})); do
             printf '%s\n' "${ary[@]}" | jq -R . | jq -s "{ \"files\" : map(\"https://${MIRROR_URL}/\" + .) }" | tee "$TMPFILE2"
-            curl -H "Content-Type:application/json" -H "Authorization: Bearer ${CLOUDFLARE_TOKEN}" -d "@$TMPFILE2" "https://api.cloudflare.com/client/v4/zones/7344a2687b9c922e211744794188f6e7/purge_cache"
+            curl -H "Content-Type:application/json" -H "Authorization: Bearer ${MWT_CLOUDFLARE_TOKEN}" -d "@$TMPFILE2" "https://api.cloudflare.com/client/v4/zones/7344a2687b9c922e211744794188f6e7/purge_cache"
             echo ""
         done
 fi
