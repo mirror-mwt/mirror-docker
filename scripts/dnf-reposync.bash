@@ -2,7 +2,6 @@
 
 set -e
 
-SCRIPT_DIR="$(dirname "$0")"
 desination_path="/mirror/dnf-reposync"
 
 ####################
