@@ -6,7 +6,7 @@ services:
     build:
       context: .
       dockerfile: Dockerfile
-    env_file: env.conf
+    env_file: secret.env
     volumes:
       - /mnt/storage/mirror:/mirror
     restart: "unless-stopped"
